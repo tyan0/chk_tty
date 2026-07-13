@@ -1,0 +1,48 @@
+E echo ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 > $$-1.txt\n
+W 100
+E cmd /c sleep 1\n
+# W 100
+E echo 
+D 20
+E AB[]\177\177
+E CD[]\177\177
+E EF[]\177\177
+E GH[]\177\177
+E IJ[]\177\177
+E KL[]\177\177
+E MN[]\177\177
+E OP[]\177\177
+E QR[]\177\177
+E ST[]\177\177
+E UV[]\177\177
+E WX[]\177\177
+E YZ[]\177\177
+E ab[]\177\177
+E cd[]\177\177
+E ef[]\177\177
+E gh[]\177\177
+E ij[]\177\177
+E kl[]\177\177
+E mn[]\177\177
+E op[]\177\177
+E qr[]\177\177
+E st[]\177\177
+E uv[]\177\177
+E wx[]\177\177
+E yz[]\177\177
+E 01[]\177\177
+E 23[]\177\177
+E 45[]\177\177
+E 67[]\177\177
+E 89[]\177\177
+D 0
+E \040
+E > $$-2.txt\n
+E if diff $$-1.txt $$-2.txt; then sleep 10; fi\n
+W 2000
+C /sleep$ 1
+E \003
+W 500
+E rm $$-1.txt $$-2.txt\n
+W 500
+G 1

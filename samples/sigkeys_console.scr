@@ -1,0 +1,730 @@
+# Run against bash in console
+#=============== Prepare
+E x86_64-w64-mingw32-gcc winsleep.c -o winsleep\n
+E x86_64-w64-mingw32-gcc wincat.c -o wincat\n
+W 5000
+#=============== Initial Check
+C /sleep$ 0
+C /winsleep$ 0
+C /cat$ 0
+C /wincat$ 0
+# =============== Start bash =============
+E bash\n
+W 1000
+# ============== Test 1-1
+E sleep 10\n
+W 500
+C /sleep$ 1
+E \003
+W 500
+C /sleep$ 0
+# ============== Test 1-2
+E sleep 10\n
+W 500
+C /sleep$ 1
+E \x1a
+W 500
+C /sleep$ 1 S
+E fg\n
+W 500
+E \003
+W 500
+C /sleep$ 0
+# ============== Test 1-3
+E sleep 10\n
+W 500
+C /sleep$ 1
+E \x1c
+W 500
+C /sleep$ 0
+# ============== Test 1-4
+E sleep 10\n
+W 500
+C /sleep$ 1
+E \004
+W 500
+C /sleep$ 1
+E \003
+W 500
+C /sleep$ 0
+# ============== Test 2-1
+E ./winsleep 10\n
+W 500
+C /winsleep$ 1
+E sleep 10\n
+E \003
+W 500
+C /winsleep$ 0
+C /sleep$ 1
+E \003
+W 500
+C /sleep$ 0
+# ============== Test 2-2
+E ./winsleep 10\n
+W 1000
+C /winsleep$ 1
+E \x1a
+W 500
+C /winsleep$ 1
+E \003
+W 500
+C /winsleep$ 0
+# ============== Test 2-3
+E ./winsleep 10\n
+W 500
+C /winsleep$ 1
+E \x1c
+W 500
+C /winsleep$ 1
+E \003
+W 500
+C /winsleep$ 0
+# ============== Test 2-4
+E ./winsleep 10\n
+W 500
+C /winsleep$ 1
+E \004
+W 500
+C /winsleep$ 1
+E \003
+W 500
+C /winsleep$ 0
+# ======= restart bash =========
+E bash\n
+W 1000
+# ============== Test 3-1
+E cat\n
+W 500
+C /cat$ 1 I
+E \003
+W 500
+C /cat$ 0
+# ============== Test 3-2
+E cat\n
+W 500
+C /cat$ 1 I
+E \x1a
+W 500
+C /cat$ 1 S
+E fg\n
+W 500
+E \003
+W 500
+C /cat$ 0
+# ============== Test 3-3
+E cat\n
+W 500
+C /cat$ 1 I
+E \x1c
+W 500
+C /cat$ 0
+# ============== Test 3-4
+E cat\n
+W 500
+C /cat$ 1 I
+E \004
+W 500
+C /cat$ 0
+# ============== Test 4-1
+E ./wincat\n
+W 500
+C /wincat$ 1
+E \003
+W 500
+C /wincat$ 0
+# ============== Test 4-2
+E ./wincat\n
+W 500
+C /wincat$ 1
+E \x1a\r
+W 500
+C /wincat$ 0
+# ============== Test 4-3
+E ./wincat\n
+W 500
+C /wincat$ 1
+E \x1c
+W 500
+C /wincat$ 1
+E \003
+W 500
+C /wincat$ 0
+# ============== Test 4-4
+E ./wincat\n
+W 500
+C /wincat$ 1
+E \004\r
+W 500
+C /wincat$ 1
+E \003
+W 500
+C /wincat$ 0
+# ============== Test 5-1
+E sleep 10 | ./winsleep 10\n
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \003
+W 500
+C /sleep$ 0
+C /winsleep$ 0
+# ============== Test 5-2
+E sleep 10 | ./winsleep 10\n
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \x1a
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \003
+W 500
+C /sleep$ 0
+C /winsleep$ 0
+# ============== Test 5-3
+E sleep 10 | ./winsleep 10\n
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \x1c
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \003
+W 500
+C /sleep$ 0
+C /winsleep$ 0
+# ============== Test 5-4
+E sleep 10 | ./winsleep 10\n
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \004
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \003
+W 500
+C /sleep$ 0
+C /winsleep$ 0
+# ============== Test 6-1
+E ./winsleep 10 | sleep 10\n
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E cat\n
+E \003
+W 500
+C /sleep$ 0
+C /winsleep$ 0
+C /cat$ 1 I
+E \003
+W 500
+C /cat$ 0
+# ============== Test 6-2
+E ./winsleep 10 | sleep 10\n
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \x1a
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \003
+W 500
+C /sleep$ 0
+C /winsleep$ 0
+# ============== Test 6-3
+E ./winsleep 10 | sleep 10\n
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \x1c
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \003
+W 500
+C /sleep$ 0
+C /winsleep$ 0
+# ============== Test 6-4
+E ./winsleep 10 | sleep 10\n
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \004
+W 500
+C /sleep$ 1
+C /winsleep$ 1
+E \003
+W 500
+C /sleep$ 0
+C /winsleep$ 0
+# ===== Restart bash ==========
+E bash\n
+W 1000
+# ============== Test 7-1
+E cat | ./wincat\n
+W 500
+C /cat$ 1 I
+C /wincat$ 1
+E \003
+W 500
+C /cat$ 0
+C /wincat$ 0
+# ============== Test 7-2
+E cat | ./wincat\n
+W 500
+C /cat$ 1 I
+C /wincat$ 1
+E \x1a
+W 500
+C /cat$ 1 I
+C /wincat$ 1
+E \003
+W 500
+C /cat$ 0
+C /wincat$ 0
+# ============== Test 7-3
+E cat | ./wincat\n
+W 500
+C /cat$ 1 I
+C /wincat$ 1
+E \x1c
+W 500
+C /cat$ 0
+C /wincat$ 0
+# ============== Test 7-4
+E cat | ./wincat\n
+W 500
+C /cat$ 1 I
+C /wincat$ 1
+E \004
+W 500
+C /cat$ 0
+C /wincat$ 0
+# ============== Test 8-1
+E ./wincat | cat\n
+W 500
+C /cat$ 1
+C /wincat$ 1
+E \003
+W 500
+C /cat$ 0
+C /wincat$ 0
+# ============== Test 8-2
+E ./wincat | cat\n
+W 500
+C /cat$ 1
+C /wincat$ 1
+E \x1a\r
+W 500
+C /cat$ 0
+C /wincat$ 0
+# ============== Test 8-3
+E ./wincat | cat\n
+W 500
+C /cat$ 1
+C /wincat$ 1
+E \x1c
+W 500
+C /cat$ 1
+C /wincat$ 1
+E \003
+W 500
+C /cat$ 0
+C /wincat$ 0
+# ============== Test 8-4
+E ./wincat | cat\n
+W 500
+C /cat$ 1
+C /wincat$ 1
+E \004\n
+W 500
+C /cat$ 1
+C /wincat$ 1
+E \003
+W 500
+C /cat$ 0
+C /wincat$ 0
+# ============== Test 9-1,2,3,4
+E gdb sleep\n
+W 2000
+E run 100\n
+W 2000
+C /sleep$ 1
+E \003
+W 1000
+E cont\n
+W 1000
+C /sleep$ 1
+E \x1a
+W 1000
+E cont\n
+W 1000
+C /sleep$ 1
+E \x1c
+W 1000
+E cont\n
+W 1000
+C /sleep$ 1
+E cont\n
+W 1000
+C /sleep$ 0
+E run 100\n
+W 2000
+E \004
+W 1000
+C /sleep$ 1
+E \003
+W 1000
+E quit\n
+W 1000
+E y\n
+C /sleep$ 0
+C /gdb$ 0
+# ============== Test 10-1,2,3,4
+E gdb winsleep\n
+W 2000
+E run 100\n
+W 2000
+N \winsleep.exe$ 1
+E \003
+W 1000
+E cont\n
+W 1000
+N \winsleep.exe$ 1
+E \x1a
+W 1000
+N \winsleep.exe$ 1
+E \x1c
+W 1000
+N \winsleep.exe$ 1
+W 1000
+E \004
+N \winsleep.exe$ 1
+E \003
+W 1000
+C /gdb$ 1 S
+E fg\n
+W 1000
+E quit\n
+W 1000
+E y\n
+N \winsleep.exe$ 0
+C /gdb$ 0
+# ============== Test 11-1,2,3,4
+E gdb cat\n
+W 2000
+E run\n
+W 2000
+C /cat$ 1 I
+E \003
+W 1000
+# ==========??????????
+#E \x08
+# ==========??????????
+E cont\n
+W 1000
+C /cat$ 1 I
+E \x1a
+W 1000
+E cont\n
+W 1000
+C /cat$ 1 I
+E \x1c
+W 1000
+C /cat$ 1 I
+E cont\n
+W 1000
+C /cat$ 1 I
+E cont\n
+W 1000
+C /cat$ 0
+E run\n
+W 2000
+E \004
+W 1000
+C /cat$ 0
+E quit\n
+C /cat$ 0
+C /gdb$ 0
+# ============== Test 12-1,2,3,4
+E gdb wincat\n
+W 2000
+E run\n
+W 2000
+N \wincat.exe$ 1
+# ***************************************
+# The Ctrl-C test does not work. Why?
+# ***************************************
+#E \003
+#W 1000
+#E cont\n
+#W 1000
+#C \wincat.exe$ 1
+E \x1a\r
+W 1000
+N \wincat.exe$ 0
+E run\n
+W 2000
+E \x1c
+W 1000
+N \wincat.exe$ 1
+E \004
+W 1000
+N \wincat.exe$ 1
+E \r
+W 1000
+# ***************************************
+# The Ctrl-C test does not work. Why?
+# ***************************************
+#E \003
+E \x1a\r
+W 1000
+E quit\n
+W 1000
+N \wincat.exe$ 0
+C /gdb$ 0
+# ===================== In cmd.exe ====================
+E cmd\n
+W 500
+# ============== Test 13-1
+E sleep 10\r
+W 500
+C /sleep$ 1
+E \003
+W 500
+C /sleep$ 0
+# ============== Test 13-2,3
+E sleep 10\r
+W 500
+C /sleep$ 1
+E \x1a
+W 500
+C /sleep$ 1
+E \x1c
+W 500
+C /sleep$ 0
+# ============== Test 13-4
+E sleep 10\r
+W 500
+C /sleep$ 1
+E \004
+W 500
+C /sleep$ 1
+E \003
+W 500
+C /sleep$ 0
+# ============== Test 14-1
+E winsleep 10\r
+W 500
+N \winsleep.exe$ 1
+E sleep 10\r
+W 500
+E \003
+N \winsleep.exe$ 0
+W 500
+C /sleep$ 1
+E \003
+W 500
+C /sleep$ 0
+# ============== Test 14-2,3,4
+E winsleep 10\r
+W 500
+N \winsleep.exe$ 1
+E \x1a
+W 500
+E \x1c
+W 500
+E \004
+W 500
+N \winsleep.exe$ 1
+E \003
+W 500
+N \winsleep.exe$ 0
+E \x08\x08\x08
+# ============== Test 15-1
+E cat\r
+W 500
+C /cat$ 1 I
+E \003
+W 500
+C /cat$ 0
+# ============== Test 15-2,3
+E cat\r
+W 500
+C /cat$ 1 I
+E \x1a
+W 500
+C /cat$ 1 I
+E \x1c
+W 500
+C /cat$ 0
+# ============== Test 15-4
+E cat\r
+W 500
+C /cat$ 1 I
+E \004
+W 500
+C /cat$ 0
+# ============== Test 16-1
+E wincat\r
+W 500
+N \wincat.exe$ 1
+E \003
+W 500
+N \wincat.exe$ 0
+# ============== Test 16-2
+E wincat\r
+W 500
+N \wincat.exe$ 1
+E \x1a\r
+W 500
+N \wincat.exe$ 0
+# ============== Test 16-3,4
+E wincat\r
+W 500
+N \wincat.exe$ 1
+E \x1c
+W 500
+N \wincat.exe$ 1
+E \004
+W 500
+N \wincat.exe$ 1
+E \003
+W 500
+N \wincat.exe$ 0
+# ============== Test 17-1
+E sleep 10 | winsleep 10\r
+W 500
+C /sleep$ 1
+N \winsleep.exe$ 1
+E \003
+W 500
+C /sleep$ 0
+N \winsleep.exe$ 0
+# ============== Test 17-2,3,4
+E sleep 10 | winsleep 10\r
+W 500
+C /sleep$ 1
+N \winsleep.exe$ 1
+E \x1a
+W 500
+E \004
+W 500
+C /sleep$ 1
+N \winsleep.exe$ 1
+E \x1c
+W 500
+C /sleep$ 0
+N \winsleep.exe$ 1
+E \003
+W 500
+C /sleep$ 0
+N \winsleep.exe$ 0
+# ============== Test 18-1
+E winsleep 10 | sleep 10\r
+W 500
+C /sleep$ 1
+N \winsleep.exe$ 1
+E cat\r
+E \003
+W 500
+C /sleep$ 0
+N \winsleep.exe$ 0
+C /cat$ 1 I
+E \003
+W 500
+C /cat$ 0
+# ============== Test 18-2,3,4
+E winsleep 100 | sleep 100\r
+W 500
+C /sleep$ 1
+N \winsleep.exe$ 1
+E \x1a
+W 500
+E \004
+W 500
+C /sleep$ 1
+N \winsleep.exe$ 1
+E \x1c
+W 500
+C /sleep$ 1
+N \winsleep.exe$ 1
+E \003
+W 500
+C /sleep$ 0
+N \winsleep.exe$ 0
+E \x08\x08\x08
+# ============== Test 19-1
+E cat | wincat\r
+W 500
+C /cat$ 1 I
+N \wincat.exe$ 1
+E \003
+W 500
+C /cat$ 0
+N \wincat.exe$ 0
+# ============== Test 19-2,3
+E cat | wincat\r
+W 500
+C /cat$ 1 I
+N \wincat.exe$ 1
+E \x1a
+W 500
+C /cat$ 1 I
+N \wincat.exe$ 1
+E \x1c
+W 500
+C /cat$ 0
+N \wincat.exe$ 0
+# ============== Test 19-4
+E cat | wincat\r
+W 500
+C /cat$ 1 I
+N \wincat.exe$ 1
+E \004
+W 500
+C /cat$ 0
+N \wincat.exe$ 0
+# ============== Test 20-1
+E wincat | cat\r
+W 500
+C /cat$ 1
+N \wincat.exe$ 1
+E \003
+W 500
+C /cat$ 0
+N \wincat.exe$ 0
+# ============== Test 20-2
+E wincat | cat\r
+W 500
+C /cat$ 1
+N \wincat.exe$ 1
+E \x1a\r
+W 500
+C /cat$ 0
+N \wincat.exe$ 0
+# ============== Test 20-3,4
+E wincat | cat\r
+W 500
+C /cat$ 1
+N \wincat.exe$ 1
+E \004
+C /cat$ 1
+N \wincat.exe$ 1
+E \x1c
+W 500
+C /cat$ 1
+N \wincat.exe$ 1
+E \003
+W 500
+C /cat$ 0
+N \wincat.exe$ 0
+# ========================= Exit from cmd.exe =====
+E exit\r
+W 500
+# ========================= Exit from bash =====
+E exit\n
+W 500

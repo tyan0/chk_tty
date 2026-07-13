@@ -1,0 +1,10 @@
+E x86_64-w64-mingw32-gcc winsleep.c -o winsleep\n
+E gcc race.c -o race\n
+W 5000
+E ./race 64\n
+W 1000
+C /cmd$ 1
+E exit\r
+W 4000
+C /cmd$ 0
+G 4
