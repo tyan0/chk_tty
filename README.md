@@ -56,3 +56,6 @@ Specify the time period value which is used by `E` command. For example, if you 
 Goto specified line in the script file.
 ### `#` \<string\>
 Comment. `string` is just ignored.
+
+## TODO
+Implement conditional jump.
