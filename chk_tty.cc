@@ -258,7 +258,7 @@ void *chk_pty::reader (void *param)
 			if (FD_ISSET(fileno(stdin), &rdfds)) {
 				len = read(fileno(stdin), buf, BUFSIZ);
 				if (len<=0) break;
-				if (len==1 && buf[0] == '\003') {
+				if (len==1 && buf[0] == '\030' /* Ctrl-X */) {
 					kill(child_pid, SIGHUP);
 					wait(NULL);
 					exit(1);
