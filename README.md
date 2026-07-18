@@ -18,7 +18,7 @@ The 5th line emits Ctrl-C.
 The last line checks if the `cat` has been terminated.
 
 This tool can check only the exsistence of processes, so you need to find a clever way to check what you want to test.
-For example, you want to check check if the file 'testfile.txt` is exist, you can use the script below.
+For example, you want to check if the file 'testfile.txt` is exist, you can use the script below.
 ```
 # Checking existence of a file
 E if [ -f testfile.txt ]; then sleep 10; fi\n
