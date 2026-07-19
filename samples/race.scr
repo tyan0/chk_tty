@@ -1,5 +1,5 @@
-E x86_64-w64-mingw32-gcc winsleep.c -o winsleep\n
-E gcc race.c -o race\n
+E if [ winsleep -ot winsleep.c ]; then x86_64-w64-mingw32-gcc winsleep.c -o winsleep; fi\n
+E if [ race -ot race.c ]; then gcc race.c -o race; fi\n
 W 5000
 E ./race 64\n
 W 1000

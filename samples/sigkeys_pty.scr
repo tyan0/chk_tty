@@ -1,6 +1,6 @@
 #=============== Prepare
-E x86_64-w64-mingw32-gcc winsleep.c -o winsleep\n
-E x86_64-w64-mingw32-gcc wincat.c -o wincat\n
+E if [ winsleep -ot winsleep.c ]; then x86_64-w64-mingw32-gcc winsleep.c -o winsleep; fi\n
+E if [ wincat -ot wincat.c ]; then x86_64-w64-mingw32-gcc wincat.c -o wincat; fi\n
 W 5000
 #=============== Initial Check
 C /sleep$ 0
