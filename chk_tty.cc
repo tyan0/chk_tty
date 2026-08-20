@@ -389,7 +389,9 @@ int chk_pty::run(char *filename, char *logfile)
 /* Console stuff */
 size_t chk_console::emit_input(const char *buf, size_t len)
 {
-	size_t total = 0;
+	size_t wlen = MultiByteToWideChar(CP_UTF8, 0, buf, len, NULL, 0);
+	wchar_t *wbuf = (wchar_t *) malloc(wlen * sizeof(wchar_t));
+	MultiByteToWideChar(CP_UTF8, 0, buf, len, wbuf, wlen);
 	DWORD mode;
 	FreeConsole();
 	AttachConsole(console_pid);
@@ -399,26 +401,25 @@ size_t chk_console::emit_input(const char *buf, size_t len)
 						NULL, OPEN_EXISTING,
 						FILE_ATTRIBUTE_NORMAL, NULL);
 	GetConsoleMode(h, &mode);
-	for (int i=0; i<len; i++) {
+	for (int i=0; i<wlen; i++) {
 		INPUT_RECORD r[2] = {0,};
 		DWORD n;
 		if ((mode & ENABLE_PROCESSED_INPUT) && buf[i] == '\003') {
 			GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
-			total += 1;
 		} else {
 			r[0].EventType = KEY_EVENT;
 			r[0].Event.KeyEvent.bKeyDown = TRUE;
-			r[0].Event.KeyEvent.uChar.AsciiChar = buf[i];
+			r[0].Event.KeyEvent.uChar.UnicodeChar = wbuf[i];
 			r[1].EventType = KEY_EVENT;
 			r[1].Event.KeyEvent.bKeyDown = FALSE;
-			r[1].Event.KeyEvent.uChar.AsciiChar = buf[i];
-			WriteConsoleInputA(h, r, 2, &n);
-			total += n/2;
+			r[1].Event.KeyEvent.uChar.UnicodeChar = wbuf[i];
+			WriteConsoleInputW(h, r, 2, &n);
 		}
 		usleep (delay * 1000);
 	}
 	CloseHandle(h);
-	return total;
+	free(wbuf);
+	return len;
 }
 
 int chk_console::run(int pid, char *filename, char *logfile)

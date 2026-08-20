@@ -1,0 +1,160 @@
+# =========== Test typeahead input ========
+# Prepare
+E tcsh\n
+W 1000
+# =========== Test 1
+E sleep 1\n
+W 100
+E ps\n
+W 500
+C /sleep$ 1
+W 1000
+C /sleep$ 0
+# =========== Test 2
+E sleep 1\n
+W 100
+E ./wincat\n
+E abc\r
+W 500
+C /sleep$ 1
+W 1000
+C /wincat$ 1
+E \x1a\r
+W 500
+C /wincat$ 0
+C /sleep$ 0
+# =========== Test 3
+E ./winsleep 1\n
+W 100
+E ps\n
+W 500
+C /winsleep$ 1
+W 1000
+C /winsleep$ 0
+# =========== Test 4
+E ./winsleep 1\n
+W 100
+E xxd\n
+E abc\n
+W 500
+C /winsleep$ 1
+W 1000
+C /winsleep$ 0
+C /xxd$ 1 I
+E \004
+W 500
+C /xxd$ 0
+# =========== Test 7
+E gdb cmd\n
+E run\n
+E echo 日本語\r
+E exit\r
+E quit\n
+E echo 日本語\n
+W 500
+C /cmd$ 0
+# =========== Test 8
+E touch bar\n
+E chmod a-w bar\n
+E gdb rm\n
+E start bar\n
+E cont\n
+E n\n
+E quit\n
+E ps\n
+W 2000
+C /gdb$ 0
+# =========== Test 9
+E cmd\n
+E ps\r
+E exit\r
+E ps\n
+W 500
+C /cmd$ 0
+# =========== Test 12
+E sleep 0.5\n
+E cmd\n
+E echo AAAA\r
+E exit\r
+E echo AAAA\n
+E cmd\n
+E echo AAAA\r
+E exit\r
+E echo AAAA\n
+E cmd\n
+E echo AAAA\r
+E exit\r
+E echo AAAA\n
+E cmd\n
+E echo AAAA\r
+E exit\r
+E echo AAAA\n
+W 4000
+C /cmd$ 0
+# =========== Test 13
+E cmd\n
+W 500
+E echo AAAA\r
+E exit\r
+E echo AAAA\r
+E cmd\r
+E echo AAAA\r
+E exit\r
+E echo AAAA\r
+E cmd\r
+E echo AAAA\r
+E exit\r
+E echo AAAA\r
+E cmd\r
+E echo AAAA\r
+E exit\r
+E echo AAAA\r
+W 1000
+C /cmd$ 0
+# =========== Test 14
+E sleep 1\n
+E cmd\n
+E tcsh\r
+E echo AAAA\n
+E exit\n
+E echo AAAA\r
+E tcsh\r
+E echo AAAA\n
+E exit\n
+E echo AAAA\r
+E tcsh\r
+E echo AAAA\n
+E exit\n
+E echo AAAA\r
+E tcsh\r
+E echo AAAA\n
+E exit\n
+E echo AAAA\r
+E exit\r
+W 6000
+C /cmd$ 0
+# =========== Test 15
+E cmd\n
+E winsleep 1\r
+W 500
+E tcsh\r
+E echo AAAA\r
+E exit\r
+E echo AAAA\r
+E tcsh\r
+E echo AAAA\r
+E exit\r
+E echo AAAA\r
+E tcsh\r
+E echo AAAA\r
+E exit\r
+E echo AAAA\r
+E tcsh\r
+E echo AAAA\r
+E exit\r
+E echo AAAA\r
+E exit\r
+W 6000
+C /cmd$ 0
+# Cleanup
+E exit\n
