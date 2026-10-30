@@ -499,7 +499,7 @@ N \winsleep.exe$ 1
 E \003
 W 500
 N \winsleep.exe$ 0
-E \x08\x08\x08
+E \x7f\x7f\x7f
 # ============== Test 15-1
 E cat\r
 W 500

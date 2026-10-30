@@ -310,28 +310,6 @@ int chk_pty::run(char *filename, char *logfile)
 	strncpy(tty, ttyname(ps) + 5, sizeof(tty) - 1);
 	tty[sizeof(tty) - 1] = '\0';
 
-	char buf1[64], buf2[64];
-	FILE *p = popen("tty", "r");
-	fscanf(p, "%63s", buf1);
-	pclose(p);
-	p = popen("cmd /c tty", "r");
-	fscanf(p, "%63s", buf2);
-	pclose(p);
-	if (strcmp(buf1, buf2) == 0) {
-		new_pty = true;
-	} else {
-		new_pty = false;
-	}
-
-#if 0
-	{ /* Disable echo */
-		struct termios tt;
-		tcgetattr(ps, &tt);
-		tt.c_lflag &= ~ECHO;
-		tcsetattr(ps, TCSANOW, &tt);
-	}
-#endif
-
 	pid = fork();
 	if (pid < 0) {
 		perror("fork()");
@@ -380,6 +358,33 @@ int chk_pty::run(char *filename, char *logfile)
 		dup2(ps, fileno(stdout));
 		dup2(ps, fileno(stderr));
 		close(ps);
+
+		{
+			/* Disable echo */
+			struct termios tt;
+			tcgetattr(0, &tt);
+			tt.c_lflag &= ~ECHO;
+			tcsetattr(0, TCSANOW, &tt);
+
+			char buf1[64], buf2[64];
+			FILE *p = popen("tty", "r");
+			fscanf(p, "%63s", buf1);
+			pclose(p);
+			p = popen("cmd /c tty", "r");
+			fscanf(p, "%63s", buf2);
+			pclose(p);
+			if (strcmp(buf1, buf2) == 0) {
+				new_pty = true;
+			} else {
+				new_pty = false;
+			}
+
+			/* Enable echo */
+			tcgetattr(0, &tt);
+			tt.c_lflag |= ECHO;
+			tcsetattr(0, TCSANOW, &tt);
+		}
+
 		execl("/usr/bin/bash", "bash", NULL);
 		perror("execl()");
 		exit(-1);
